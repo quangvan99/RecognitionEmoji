@@ -21,10 +21,6 @@ def realtime_emotions():
     model = model_weights(model)
     print('Model loaded')
 
-    # save location for image
-    save_loc = 'save_loc/1.jpg'
-    # numpy matrix for stroing prediction
-    result = np.array((1,7))
     # for knowing whether prediction has started or not
     once = True
     # load haar cascade for face
@@ -85,22 +81,22 @@ def realtime_emotions():
                 prev_time = time.time()
 
 
-            if once == True:
-                total_sum = np.sum(result[0])
-                # select the emoji face with highest confidence
-                emoji_face = emoji_faces[np.argmax(result[0])]
-                for index, emotion in enumerate(EMOTIONS):
-                    text = str(
-                        round(Decimal(result[0][index]/total_sum*100), 2) ) + "%"
-                    # for drawing progress bar
-                    cv2.rectangle(frame, (100, index * 20 + 10), (100 +int(result[0][index] * 100), (index + 1) * 20 + 4),
-                                    (255, 0, 0), -1)
-                    # for putting emotion labels
-                    cv2.putText(frame, emotion, (10, index * 20 + 20),
-                                cv2.FONT_HERSHEY_SIMPLEX, 0.5, (7, 109, 16), 2)
-                    # for putting percentage confidence
-                    cv2.putText(frame, text, (105 + int(result[0][index] * 100), index * 20 + 20),
-                                cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 0), 1)
+
+            total_sum = np.sum(result[0])
+            # select the emoji face with highest confidence
+            emoji_face = emoji_faces[np.argmax(result[0])]
+            for index, emotion in enumerate(EMOTIONS):
+                text = str(
+                    round(Decimal(result[0][index]/total_sum*100), 2) ) + "%"
+                # for drawing progress bar
+                cv2.rectangle(frame, (100, index * 20 + 10), (100 +int(result[0][index] * 100), (index + 1) * 20 + 4),
+                                (255, 0, 0), -1)
+                # for putting emotion labels
+                cv2.putText(frame, emotion, (10, index * 20 + 20),
+                            cv2.FONT_HERSHEY_SIMPLEX, 0.5, (7, 109, 16), 2)
+                # for putting percentage confidence
+                cv2.putText(frame, text, (105 + int(result[0][index] * 100), index * 20 + 20),
+                            cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 0), 1)
                     
                     
                 # overlay emoji on the frame for all the channels
